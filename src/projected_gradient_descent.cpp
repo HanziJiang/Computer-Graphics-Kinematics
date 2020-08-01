@@ -9,6 +9,11 @@ void projected_gradient_descent(
   Eigen::VectorXd & z)
 {
   /////////////////////////////////////////////////////////////////////////////
-  // Add your code here
+  Eigen::VectorXd gradient;
+  for (int i = 0; i < max_iters; i++) {
+    gradient = grad_f(z);
+    z -= line_search(f, proj_z, z, gradient, 1000) * gradient;
+    proj_z(z);
+  }
   /////////////////////////////////////////////////////////////////////////////
 }

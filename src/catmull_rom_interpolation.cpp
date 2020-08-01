@@ -6,7 +6,54 @@ Eigen::Vector3d catmull_rom_interpolation(
   double t)
 {
   /////////////////////////////////////////////////////////////////////////////
-  // Replace with your code
-  return Eigen::Vector3d(0,0,0);
+  // Reference: http://graphics.cs.cmu.edu/nsp/course/15-462/Fall04/assts/catmullRom.pdf
+  const int size = keyframes.size();
+
+  if (size < 1) return Eigen::Vector3d(0.0, 0.0, 0.0);
+
+  if (size == 1) return keyframes[0].second;
+
+  const double tension = 0.5;
+
+  int index;
+  for (int i = 0; i <= size; i++) {
+    if (i == size || keyframes[i].first > t) {
+      index = i;
+      break;
+    }
+  }
+
+  Eigen::Vector3d P0, P1, P2, P3;
+
+  // TODO: simplify
+  if (index == 0) {
+    P0 = keyframes[0].second;
+    P1 = keyframes[0].second;
+  } else if (index == 1) {
+    P0 = keyframes[0].second;
+    P1 = keyframes[0].second;
+  } else {
+    P0 = keyframes[index - 2].second;
+    P1 = keyframes[index - 1].second;
+  }
+
+  if (index == size - 1) {
+    P2 = keyframes[index].second;
+    P3 = keyframes[index].second;
+  } else if (index == size) {
+    P2 = keyframes[size - 1].second;
+    P3 = keyframes[size - 1].second;
+  } else {
+    P2 = keyframes[index].second;
+    P3 = keyframes[index + 1].second;
+  }
+
+  const Eigen::Vector3d a = P1;
+  const Eigen::Vector3d b = -tension * P0 + tension * P2;
+  const Eigen::Vector3d c = 2 * tension * P0 + (tension - 3) * P1 + (3 - 2 * tension) * P2 - tension * P3;
+  const Eigen::Vector3d d = -tension * P0 + (2 - tension) * P1 + (tension - 2) * P2 + tension * P3;
+
+  return a * pow(t, 3) + b * pow(t, 2) + c * t + d;
+
   /////////////////////////////////////////////////////////////////////////////
 }

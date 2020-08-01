@@ -10,14 +10,14 @@ void linear_blend_skinning(
   /////////////////////////////////////////////////////////////////////////////
   const int V_size = V.size();
   U.resize(V_size, 3);
-  double weight;
   Eigen::Vector4d pose;
   
   for (int i = 0; i < V_size; i++) {
     pose = Eigen::Vector4d::Zero();
     for (int j = 0; j < skeleton.size(); j++) {
-      weight = W(i,skeleton[j].weight_index);
-      if (weight > 0) pose += T[j] * Eigen::Vector4d(V(i, 0), V(i, 1), V(i, 2), 1.0) * weight;
+      if (skeleton[j].weight_index > 0) {
+        pose += T[j] * Eigen::Vector4d(V(i, 0), V(i, 1), V(i, 2), 1.0) * W(i, skeleton[j].weight_index);
+      }
     }
     U.row(i) = Eigen::Vector3d(pose.x()/pose.w(), pose.y()/ pose.w(), pose.z()/ pose.w()); 
   }

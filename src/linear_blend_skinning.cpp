@@ -8,7 +8,7 @@ void linear_blend_skinning(
   Eigen::MatrixXd & U)
 {
   /////////////////////////////////////////////////////////////////////////////
-  const int V_size = V.size();
+  const int V_size = V.rows();
   U.resize(V_size, 3);
   Eigen::Vector4d pose;
   

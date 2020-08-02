@@ -16,7 +16,7 @@ void end_effectors_objective_and_gradient(
   f = [&](const Eigen::VectorXd & A)->double
   {
     Skeleton new_skeleton = copy_skeleton_at(skeleton, A);
-  	Eigen::Vector3d tips = transformed_tips(new_skeleton, b);
+  	Eigen::VectorXd tips = transformed_tips(new_skeleton, b);
     return (tips - xb0).dot(tips - xb0);
   };
 

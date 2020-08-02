@@ -11,7 +11,7 @@ Eigen::Affine3d euler_angles_to_transform(
 
   return Eigen::Affine3d (
     Eigen::AngleAxisd(angle_3, Eigen::Vector3d::UnitX()) * 
-    Eigen::AngleAxisd(angle_2,  Eigen::Vector3d::UnitY()) * 
+    Eigen::AngleAxisd(angle_2,  Eigen::Vector3d::UnitZ()) * 
     Eigen::AngleAxisd(angle_1, Eigen::Vector3d::UnitX())
     );
   /////////////////////////////////////////////////////////////////////////////

@@ -23,12 +23,20 @@ void end_effectors_objective_and_gradient(
   grad_f = [&](const Eigen::VectorXd & A)->Eigen::VectorXd
   {
     Skeleton new_skeleton = copy_skeleton_at(skeleton, A);
-  	Eigen::Vector3d tips = transformed_tips(new_skeleton, b);
+  	Eigen::VectorXd tips = transformed_tips(new_skeleton, b);
     
     Eigen::MatrixXd J;
   	kinematics_jacobian(new_skeleton, b, J);
 
-    return J.transpose() * 2 * (tips - xb0);
+    Eigen::VectorXd grad = Eigen::VectorXd::Zero(A.size());
+    
+    for (int i = 0; i < b.size(); i++) {
+      for (int j = 0; j < 3; j++) {
+        grad += J.row(3 * i + j).transpose() * (2 * (tips(3 * i + j) - xb0(3 * i + j)));
+      }
+    }
+
+    return grad;
   };
 
   proj_z = [&](Eigen::VectorXd & A)

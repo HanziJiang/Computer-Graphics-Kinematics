@@ -7,11 +7,12 @@ Eigen::Affine3d get_pose(const int i, const Skeleton skeleton) {
   const int parent_index = skeleton[i].parent_index;
   
   // Do nothing if bone is root
-  if (parent_index == -1) return Eigen::Affine3d::Identity();
+  if (parent_index < 0) return Eigen::Affine3d::Identity();
 
   const Bone bone = skeleton[i];
 
   Eigen::Affine3d parent_pose = get_pose(parent_index, skeleton);
+  
   return Eigen::Affine3d(parent_pose * bone.rest_T * euler_angles_to_transform(bone.xzx) * bone.rest_T.inverse());
 }
 

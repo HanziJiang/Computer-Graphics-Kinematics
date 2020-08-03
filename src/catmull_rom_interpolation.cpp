@@ -14,7 +14,11 @@ Eigen::Vector3d catmull_rom_interpolation(
   if (size == 1) return keyframes[0].second;
 
   const double tension = 0.5;
+
+
   t = fmod(t, keyframes[size - 1].first);
+
+  // find where to insert the new frame
   int index = size;
   for (int i = 0; i < size; i++) {
     if (keyframes[i].first > t) {
@@ -26,13 +30,7 @@ Eigen::Vector3d catmull_rom_interpolation(
   Eigen::Vector3d P0, P1, P2, P3;
   double t0, t1, t2, t3;
 
-  // TODO: simplify
-  if (index == 0) {
-    P0 = keyframes[0].second;
-    P1 = keyframes[0].second;
-    t0 = keyframes[0].first;
-    t1 = keyframes[0].first;
-  } else if (index == 1) {
+  if (index <= 1) {
     P0 = keyframes[0].second;
     P1 = keyframes[0].second;
     t0 = keyframes[0].first;
@@ -44,12 +42,7 @@ Eigen::Vector3d catmull_rom_interpolation(
     t1 = keyframes[index - 1].first;
   }
 
-  if (index == size - 1) {
-    P2 = keyframes[size - 1].second;
-    P3 = keyframes[size - 1].second;
-    t2 = keyframes[size - 1].first;
-    t3 = keyframes[size - 1].first;
-  } else if (index == size) {
+  if (index >= size - 1) {
     P2 = keyframes[size - 1].second;
     P3 = keyframes[size - 1].second;
     t2 = keyframes[size - 1].first;
@@ -66,7 +59,8 @@ Eigen::Vector3d catmull_rom_interpolation(
   const Eigen::Vector3d c = 2 * tension * P0 + (tension - 3) * P1 + (3 - 2 * tension) * P2 - tension * P3;
   const Eigen::Vector3d d = -tension * P0 + (2 - tension) * P1 + (tension - 2) * P2 + tension * P3;
 
-  const double s = abs((t - t1) / (t2 - t1));
-  return d * pow(s, 3) + c * pow(s, 2) + b * s + a;
+  const double u = (t2 - t1 == 0) ? 0.5 : abs((t - t1) / (t2 - t1));
+
+  return d * pow(u, 3) + c * pow(u, 2) + b * u + a;
   /////////////////////////////////////////////////////////////////////////////
 }

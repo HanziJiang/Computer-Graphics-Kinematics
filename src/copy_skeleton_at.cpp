@@ -4,11 +4,10 @@ Skeleton copy_skeleton_at(
   const Eigen::VectorXd & A)
 {
   /////////////////////////////////////////////////////////////////////////////
-  Skeleton copy = skeleton;
-  int skeleton_size = skeleton.size();
-  for (int i = 0; i < skeleton_size; i++){
-    copy[i].xzx = Eigen::Vector3d(A[i * 3], A[i * 3 + 1], A[i * 3 + 2]);
+  Skeleton skeleton_copy = skeleton;
+  for (int i = 0; i < skeleton.size(); i++){
+    skeleton_copy[i].xzx = Eigen::Vector3d(A[i * 3], A[i * 3 + 1], A[i * 3 + 2]);
   }
-  return copy;
+  return skeleton_copy;
   /////////////////////////////////////////////////////////////////////////////
 }

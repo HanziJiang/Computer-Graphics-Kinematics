@@ -4,6 +4,7 @@ Eigen::Affine3d euler_angles_to_transform(
   const Eigen::Vector3d & xzx)
 {
   /////////////////////////////////////////////////////////////////////////////
+  
   // convert angles from degrees to radians
   const double angle_1 = xzx.x() * M_PI / 180.0;
   const double angle_2 = xzx.y() * M_PI / 180.0;

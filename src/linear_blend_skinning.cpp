@@ -11,7 +11,6 @@ void linear_blend_skinning(
   const int V_size = V.rows();
   U.resize(V_size, 3);
   Eigen::Vector4d pose;
-  
   for (int i = 0; i < V_size; i++) {
     pose = Eigen::Vector4d::Zero();
     for (int j = 0; j < skeleton.size(); j++) {

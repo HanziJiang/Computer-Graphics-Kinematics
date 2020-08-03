@@ -17,6 +17,7 @@ void end_effectors_objective_and_gradient(
   {
     Skeleton new_skeleton = copy_skeleton_at(skeleton, A);
   	Eigen::VectorXd tips = transformed_tips(new_skeleton, b);
+    // This is the same as the least squares.
     return (tips - xb0).dot(tips - xb0);
   };
 
@@ -43,9 +44,9 @@ void end_effectors_objective_and_gradient(
   {
     assert(skeleton.size()*3 == A.size());
     for (int i = 0; i < skeleton.size(); i++) {
-			A[3 * i] = std::max(skeleton[i].xzx_min[0], std::min(skeleton[i].xzx_max[0], A[3 * i]));
-			A[3 * i + 1] = std::max(skeleton[i].xzx_min[1], std::min(skeleton[i].xzx_max[1], A[3 * i + 1]));
-			A[3 * i + 2] = std::max(skeleton[i].xzx_min[2], std::min(skeleton[i].xzx_max[2], A[3 * i + 2]));  	
+      for (int j = 0; j < 3; j++) {
+        A[3 * i + j] = std::max(skeleton[i].xzx_min[j], std::min(skeleton[i].xzx_max[j], A[3 * i + j]));
+      } 	
   	}
   };
   /////////////////////////////////////////////////////////////////////////////
